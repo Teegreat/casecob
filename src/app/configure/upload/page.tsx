@@ -6,46 +6,43 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { cn } from "@/lib/utils";
 import { Image, Loader2, MousePointerSquareDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import Dropzone, { FileRejection } from "react-dropzone";
 
 const Page = () => {
-    const {toast} = useToast()
+  const { toast } = useToast();
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-
   const router = useRouter();
 
-  const {startUpload, isUploading} = useUploadThing("imageUploader", {
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: ([data]) => {
       const configId = data.serverData.configId;
       startTransition(() => {
         router.push(`/configure/design?id=${configId}`);
       });
     },
-
     onUploadProgress(p) {
-        setUploadProgress(p)
-    }
+      setUploadProgress(p);
+    },
   });
 
   const onDropRejected = (rejectedFiles: FileRejection[]) => {
-    const [file] = rejectedFiles
-    setIsDragOver(false)
+    const [file] = rejectedFiles;
+
+    setIsDragOver(false);
 
     toast({
       title: `${file.file.type} type is not supported.`,
-      description: "Please choose a PNG, JPG, or JPEG image insted.",
-      variant: "destructive"
-    })
+      description: "Please choose a PNG, JPG, or JPEG image instead.",
+      variant: "destructive",
+    });
   };
 
   const onDropAccepted = (acceptedFiles: File[]) => {
-    startUpload(acceptedFiles, {configId: undefined})
+    startUpload(acceptedFiles, { configId: undefined });
 
-    setIsDragOver(false)
-
-
+    setIsDragOver(false);
   };
 
   const [isPending, startTransition] = useTransition();
@@ -84,7 +81,6 @@ const Page = () => {
               ) : (
                 <Image className="h-6 w-6 text-zinc-500 mb-2" />
               )}
-
               <div className="flex flex-col justify-center mb-2 text-sm text-zinc-700">
                 {isUploading ? (
                   <div className="flex flex-col items-center">
@@ -96,7 +92,7 @@ const Page = () => {
                   </div>
                 ) : isPending ? (
                   <div className="flex flex-col items-center">
-                    <p>Redirecting, pleae wait...</p>
+                    <p>Redirecting, please wait...</p>
                   </div>
                 ) : isDragOver ? (
                   <p>
@@ -109,8 +105,9 @@ const Page = () => {
                   </p>
                 )}
               </div>
+
               {isPending ? null : (
-                <p className="text-zinc-500">PNG, JPG, JPEG</p>
+                <p className="text-xs text-zinc-500">PNG, JPG, JPEG</p>
               )}
             </div>
           )}
