@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
-    "postbuild": "node ./scripts/add-urls-to-kinde.js"
+    "postinstall": "prisma generate"
+    
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
